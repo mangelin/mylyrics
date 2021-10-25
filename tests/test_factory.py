@@ -21,3 +21,18 @@ class ProxyFactoryTestCase(TestCase):
 
         res_el = self.factory.create_proxy("elyrics")
         self.assertEqual(res_el.get_song(), self.expected_elyrics)
+
+
+class AZLyricsTestCase(TestCase):
+    def setUp(self):
+        self.factory = ProxyLyricsFactory()
+        self.song = "song"
+        self.proxy_name = "azlyrics"
+
+    @patch("app.src.lyrics.AzlyricsProxy.get_song")
+    def test_get_song(self,mock_get_song):
+        mock_get_song.return_value = self.song
+        
+        p = self.factory.create_proxy(self.proxy_name)
+
+        self.assertEqual(p.get_song(), self.song)
