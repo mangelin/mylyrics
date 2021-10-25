@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 class LyricsRetriverProxy(metaclass=ABCMeta):
     @abstractmethod
     def get_song(artist: str, song:str):
-        raise NotImplementedError
+        raise NotImplementedError # pragma: no cover
     
 
 class AzlyricsProxy(LyricsRetriverProxy):
