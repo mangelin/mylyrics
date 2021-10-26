@@ -4,6 +4,10 @@ class LyricsRetriverProxy(metaclass=ABCMeta):
     @abstractmethod
     def get_song(artist: str, song:str):
         raise NotImplementedError # pragma: no cover
+
+    @abstractmethod
+    def save(song:str):
+        raise NotImplementedError # pragma: no cover
     
 
 class AzlyricsProxy(LyricsRetriverProxy):

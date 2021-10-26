@@ -282,3 +282,6 @@ data/*
 import/*
 export/*
 *.code-workspace
+
+#virtualenv
+py3/*
