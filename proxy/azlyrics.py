@@ -2,14 +2,17 @@ from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
 import requests, re
 
+from config import AZLYRICS_SEARCH_URL
+
 from .lyrics import LyricsRetriverProxy
 
 class AzlyricsProxy(LyricsRetriverProxy):
     def __init__(self):
         self._name = "AZLyrics"
+        self._az_search_url = AZLYRICS_SEARCH_URL
 
     def get_artist_page(self, artist:str):
-        r = requests.get(f"https://search.azlyrics.com/search.php?q={artist}")
+        r = requests.get(f"{self._az_search_url}{artist}")
         if r.status_code != 200:
             return None
 
@@ -38,3 +41,9 @@ class AzlyricsProxy(LyricsRetriverProxy):
             return None
 
         return r.text
+    
+    def to_txt(self, lyrics):
+        soup = bs(lyrics, "html.parser")
+        div_ringtone = soup.find(attrs={"class":"ringtone"})
+        div_lyrics = div_ringtone.findNext("div")
+        return div_lyrics.text

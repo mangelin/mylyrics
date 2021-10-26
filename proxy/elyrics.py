@@ -1,5 +1,4 @@
 from .lyrics import LyricsRetriverProxy
-
 class ElyricsProxy(LyricsRetriverProxy):
     def __init__(self):
         self._name = "ELyrics"

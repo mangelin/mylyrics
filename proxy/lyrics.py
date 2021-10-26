@@ -1,9 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from slugify import slugify
 
-from bs4 import BeautifulSoup as bs
-from urllib.parse import urljoin
-
 class LyricsRetriverProxy(metaclass=ABCMeta):
     def get_song(self, artist: str, song_name:str):
         artist_page_url = self.get_artist_page(artist)
@@ -36,10 +33,3 @@ class LyricsRetriverProxy(metaclass=ABCMeta):
     @abstractmethod
     def to_txt(self, lyrics:str):
         raise NotImplementedError # pragma: no cover
-
-
-    def to_txt(self, lyrics):
-        soup = bs(lyrics, "html.parser")
-        div_ringtone = soup.find(attrs={"class":"ringtone"})
-        div_lyrics = div_ringtone.findNext("div")
-        return div_lyrics.text

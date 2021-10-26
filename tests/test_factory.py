@@ -1,38 +1,41 @@
 from unittest.mock import MagicMock, patch
 from unittest import TestCase
-from proxy.lyrics import ProxyLyricsFactory
+from proxy import ProxyLyricsFactory
+from proxy.azlyrics import AzlyricsProxy
+from proxy.elyrics import ElyricsProxy
 
+from tests import fake
 
 class ProxyFactoryTestCase(TestCase):
     def setUp(self):
         self.factory = ProxyLyricsFactory()
-        self.expected_azlyrics = "AZ"
-        self.expected_elyrics = "EZ"
+
+    def test_proxy_factory(self):
         
-
-    @patch("proxy.lyrics.ElyricsProxy")
-    @patch("proxy.lyrics.AzlyricsProxy")
-    def test_proxy_factory(self, mock_azlyrics, mock_elyrics):
-        mock_azlyrics.get_song = MagicMock(return_value=self.expected_azlyrics)
-        mock_elyrics.get_song = MagicMock(return_value=self.expected_elyrics)
-
         res_az = self.factory.create_proxy("azlyrics")
-        self.assertEqual(res_az.get_song(), self.expected_azlyrics)
+        self.assertTrue(isinstance(res_az, AzlyricsProxy))
 
         res_el = self.factory.create_proxy("elyrics")
-        self.assertEqual(res_el.get_song(), self.expected_elyrics)
+        self.assertTrue(isinstance(res_el, ElyricsProxy))
 
 
 class AZLyricsTestCase(TestCase):
     def setUp(self):
-        self.factory = ProxyLyricsFactory()
-        self.song = "song"
-        self.proxy_name = "azlyrics"
+        self.expected_lyrics = fake.text()
+        self.expected_artist = fake.name()
+        self.expected_songname = fake.name()
 
-    @patch("proxy.lyrics.AzlyricsProxy.get_song")
+        self.proxy_name = "azlyrics"
+        self.factory = ProxyLyricsFactory()
+        self.proxy = self.factory.create_proxy(self.proxy_name)
+
+    def test_proxy_name(self):
+        self.assertEqual(self.proxy.name, "AZLyrics")
+
+    @patch("proxy.azlyrics.AzlyricsProxy.get_song")
     def test_get_song(self,mock_get_song):
-        mock_get_song.return_value = self.song
+        mock_get_song.return_value = self.expected_lyrics
         
         p = self.factory.create_proxy(self.proxy_name)
 
-        self.assertEqual(p.get_song(), self.song)
+        self.assertEqual(p.get_song(self.expected_artist,self.expected_songname), self.expected_lyrics)
