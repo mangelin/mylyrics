@@ -1,33 +1,60 @@
 from abc import ABCMeta, abstractmethod
-from slugify import slugify
+import os
+
+from config import OUTPUT_FORMAT
 
 class LyricsRetriverProxy(metaclass=ABCMeta):
-    def get_song(self, artist: str, song_name:str):
+    def __init__(self):
+        self.outputs={
+            'txt': self.to_txt
+        }
+    
+    
+    def provided_by(func):
+        def inner(*args, **kwargs):
+            t = func(*args, **kwargs) 
+            t += f"\nProvided by {args[0].name}"
+            return t
+        return inner
+
+    @provided_by
+    def get_lyrics(self, artist: str, song_name:str, out_format:str=OUTPUT_FORMAT):
         artist_page_url = self.get_artist_page(artist)
         if not artist_page_url:
             raise ValueError(f"Artist {artist} not found")
 
-        lyrics = self.get_lyrics(artist_page_url, song_name)
+        lyrics_url = self.get_lyrics_url(artist_page_url, song_name)
+        if not lyrics_url:
+            raise ValueError(f"Url Lyrics for {song_name} by {artist} not found")
+
+        lyrics = self.retrive_lyrics(lyrics_url)
         if not lyrics:
             raise ValueError(f"Lyrics for {song_name} by {artist} not found")
 
-        return self.to_txt(lyrics)
-    
-    def save(self, artist:str, song_name:str, lyrics:str):
-        file_name = f"./{slugify(artist)}/{slugify(song_name)}.txt"
-        with open(file_name,"w") as f:
-            f.write(lyrics)
+        return self.__format_result(lyrics, out_format)
+        
     
     @property
     def name(self):
         return getattr(self,"_name","undefined")
     
+    def __format_result(self, lyrics:str, out_typ:str):
+        outf = self.outputs[out_typ]
+        if not outf:
+            raise ValueError(f"Unknown output type {out_typ}")
+
+        return outf(lyrics)
+
     @abstractmethod
     def get_artist_page(self, artist:str):
         raise NotImplementedError # pragma: no cover
 
     @abstractmethod
-    def get_lyrics(self, artist_page_url:str, song_name:str):
+    def get_lyrics_url(self, artist_page_url:str, song_name:str):
+        raise NotImplementedError # pragma: no cover
+
+    @abstractmethod
+    def retrive_lyrics(self, lyrics_url:str):
         raise NotImplementedError # pragma: no cover
 
     @abstractmethod
