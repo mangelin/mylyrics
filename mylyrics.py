@@ -1,7 +1,6 @@
-import argparse
 
-from utils import __version__ as version
+from utils import MyLyricsCommand
 
 if __name__ == "__main__":
-    print(f"mylirics {version}")
-    print("Hello world")
+   cmd = MyLyricsCommand()
+   cmd.handle_command()

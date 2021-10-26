@@ -1,5 +1,7 @@
-from .lyrics import ProxyLyricsFactory
+from .azlyrics import AzlyricsProxy
+from .elyrics import ElyricsProxy
 
-__all__ = [
-    "lyrics"
-]
+class ProxyLyricsFactory():
+    def create_proxy(self, typ:str):
+        targetclass = f"{typ.capitalize()}Proxy"
+        return globals()[targetclass]()
