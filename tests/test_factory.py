@@ -44,6 +44,11 @@ class TestAbstractProxy(TestCase, AbstractLyricsRetriverProxy):
         res = self.get_lyrics('foo','bar')
         self.assertEqual(res, f"{self.to_txt_ret}\nProvided by undefined")
 
+    def test_behaviour_ko_lyrics_url(self):
+        self.get_lyrics_url_ret = None
+
+        self.assertRaises(ValueError, lambda: self.get_lyrics('foo','bar'))
+
     def test_behaviour_ko_artist_page(self):
         self.get_artist_page_ret = None
 
@@ -53,5 +58,13 @@ class TestAbstractProxy(TestCase, AbstractLyricsRetriverProxy):
         self.get_lyrics_ret = None
 
         self.assertRaises(ValueError, lambda: self.get_lyrics('foo','bar'))
+
+    def test_format_result(self):
+        ret = self._format_result('foo','txt')
+        
+        self.assertEqual(ret, self.to_txt_ret)
+
+        self.assertRaises(ValueError, lambda: self._format_result('foo','xml'))
+
 
 

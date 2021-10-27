@@ -31,15 +31,15 @@ class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
         if not lyrics:
             raise ValueError(f"Lyrics for {song_name} by {artist} not found")
 
-        return self.__format_result(lyrics, out_format)
+        return self._format_result(lyrics, out_format)
         
     
     @property
     def name(self):
         return getattr(self,"_name","undefined")
     
-    def __format_result(self, lyrics:str, out_typ:str)->str:
-        outf = self.outputs[out_typ]
+    def _format_result(self, lyrics:str, out_typ:str)->str:
+        outf = self.outputs.get(out_typ)
         if not outf:
             raise ValueError(f"Unknown output type {out_typ}")
 
