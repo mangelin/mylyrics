@@ -3,7 +3,8 @@ import sys
 from slugify import slugify
 import os
 
-from utils import __version__ as version
+from pathlib import Path
+from management import __version__ as version
 from proxy import ProxyLyricsFactory
 
 from config import DEFAULT_SAVE_DIRECTORY
@@ -13,8 +14,10 @@ def save(artist:str, song_name:str, lyrics:str):
     artist_directory_name = f"{DEFAULT_SAVE_DIRECTORY}/{slugify(artist)}"
     
     try:
-        os.mkdir(artist_directory_name)
-    except:
+        p = Path(artist_directory_name)
+        p.mkdir(parents=True)
+    except Exception as e:
+        print(e)
         pass
 
     file_name = os.path.join(artist_directory_name, f"{slugify(song_name)}.txt")
