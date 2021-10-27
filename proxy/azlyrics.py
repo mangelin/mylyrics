@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
 import requests, re
 
-from config import AZLYRICS_SEARCH_URL
+import config
 
 from .abstractLyrics import AbstractLyricsRetriverProxy
 from .helpers import helper_retrive_url
@@ -22,8 +22,8 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
     def __init__(self):
         super().__init__()
 
-        self._name = "AZLyrics"
-        self._az_search_url = AZLYRICS_SEARCH_URL
+        self._name = config.AZLYRICS_PROXY
+        self._az_search_url = config.AZLYRICS_SEARCH_URL
 
     def get_artist_page_url(self, artist:str)->str:
         r = helper_retrive_url(f"{self._az_search_url}{artist}")

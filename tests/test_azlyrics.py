@@ -2,6 +2,8 @@ from unittest.mock import Mock, patch, MagicMock
 from unittest import TestCase
 from proxy import ProxyLyricsFactory
 
+import config
+
 from proxy.azlyrics import _locate_anchor
 
 from tests import fake
@@ -12,7 +14,7 @@ class AZLyricsTestCase(TestCase):
         self.expected_songname = fake.name()
         self.expected_artist_link = fake.url()
 
-        self.proxy_name = "azlyrics"
+        self.proxy_name = config.AZLYRICS_PROXY.lower()
         self.factory = ProxyLyricsFactory()
         self.proxy = self.factory.create_proxy(self.proxy_name)
 
@@ -24,7 +26,7 @@ class AZLyricsTestCase(TestCase):
         self.mock_soup.findNext = MagicMock(return_value=None)
 
     def test_proxy_name(self):
-        self.assertEqual(self.proxy.name, "AZLyrics")
+        self.assertEqual(self.proxy.name, config.AZLYRICS_PROXY)
 
     @patch("proxy.azlyrics.AzlyricsProxy.get_lyrics")
     def test_get_lyrics(self,mock_get_lyrics):
