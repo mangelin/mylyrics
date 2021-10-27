@@ -5,6 +5,7 @@ import requests, re
 from config import AZLYRICS_SEARCH_URL
 
 from .abstractLyrics import AbstractLyricsRetriverProxy
+from .helpers import helper_retrive_url
 
 # Helpers function
 def _locate_string_value(soup, string_value):
@@ -19,12 +20,6 @@ def _locate_anchor(soup, value):
         return None
     return res.findParent("a")
 
-def _retrive_url(url:str):
-    r = requests.get(url)
-    if r.status_code != 200:
-        return None
-    return r.text
-
 # AzLyrics.com proxy
 class AzlyricsProxy(AbstractLyricsRetriverProxy):
     def __init__(self):
@@ -34,7 +29,7 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
         self._az_search_url = AZLYRICS_SEARCH_URL
 
     def get_artist_page_url(self, artist:str)->str:
-        r = _retrive_url(f"{self._az_search_url}{artist}")
+        r = helper_retrive_url(f"{self._az_search_url}{artist}")
         if not r:
             return None
 
@@ -54,7 +49,7 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
         return anchor.get("href")
 
     def get_lyrics_url(self, artist_page_url:str, song_name:str)->str:
-        r = _retrive_url(artist_page_url)
+        r = helper_retrive_url(artist_page_url)
         if not r:
             return None
 
@@ -70,7 +65,7 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
         return song_url
 
     def fetch_lyric_content(self, lyrics_url:str)->str:
-        return _retrive_url(lyrics_url)
+        return helper_retrive_url(lyrics_url)
 
     def to_txt(self, lyrics):
         soup = bs(lyrics, "html.parser")

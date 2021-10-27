@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 import re
 
 from .abstractLyrics import AbstractLyricsRetriverProxy
+from .helpers import helper_post_form, helper_retrive_url
 
 # Helpers function
 def _locate_string_value(soup, string_value):
@@ -18,24 +19,13 @@ def _locate_string_value(soup, string_value):
     return None
 
 
-def _post_form(url, payload):
-    r = requests.post(url, data=payload)
-    if r.status_code != 200:
-        return None
-    return r.text
-
-def _retrive_url(url:str):
-    r = requests.get(url)
-    if r.status_code != 200:
-        return None
-    return r.text
 class ElyricsProxy(AbstractLyricsRetriverProxy):
     def __init__(self):
         super().__init__()
         self._name = "ELyrics"
 
     def get_artist_page_url(self, artist:str)->str:
-        r = _post_form(ELYRICS_SEARCH_URL,{'q':artist})
+        r = helper_post_form(ELYRICS_SEARCH_URL,{'q':artist})
         if not r:
             return None
 
@@ -48,7 +38,7 @@ class ElyricsProxy(AbstractLyricsRetriverProxy):
         return urljoin("https://elyrics.net",a_string)
 
     def get_lyrics_url(self, artist_page_url:str, song_name:str)->str:
-        r = _retrive_url(artist_page_url)
+        r = helper_retrive_url(artist_page_url)
         if not r:
             return None
 
@@ -64,7 +54,7 @@ class ElyricsProxy(AbstractLyricsRetriverProxy):
         return song_url
 
     def fetch_lyric_content(self, lyrics_url:str)->str:
-        return _retrive_url(lyrics_url)
+        return helper_retrive_url(lyrics_url)
 
     def to_txt(self, lyrics):
         soup = bs(lyrics, "html.parser")
