@@ -58,10 +58,17 @@ $ source py3/bin/activate
 
 ### installing depencencies
 
+Dependencies required to run the command:
+
 ```
-$ pip install -r requirements
+$ pip install -r requirements/base.txt
 ```
 
+Dependencies required to run unit tests:
+
+```
+$ pip install -r requirements/test.txt
+```
 
 ### Running unit tests
 
