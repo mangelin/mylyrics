@@ -18,7 +18,10 @@ def _locate_anchor(soup, value):
     res = soup.find(string=re.compile(value))
     if not res:
         return None
-    return res.findParent("a")
+    anchor = res.findParent("a")
+    if not anchor:
+        return None
+    return anchor.get("href")
 
 # AzLyrics.com proxy
 class AzlyricsProxy(AbstractLyricsRetriverProxy):
@@ -42,11 +45,7 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
         if not t:
             return None
 
-        anchor = _locate_anchor(t, artist)
-        if not anchor:
-            return None
-
-        return anchor.get("href")
+        return _locate_anchor(t, artist)
 
     def get_lyrics_url(self, artist_page_url:str, song_name:str)->str:
         r = helper_retrive_url(artist_page_url)
@@ -55,17 +54,16 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
 
         soup = bs(r, "html.parser")
 
-        anchor = _locate_anchor(soup, song_name)
-        if not anchor:
+        song_relative_url = _locate_anchor(soup, song_name)
+        if not song_relative_url:
             return None
 
-        song_relative_url = anchor.get("href")
         song_url = urljoin(artist_page_url,song_relative_url)
 
         return song_url
 
     def fetch_lyric_content(self, lyrics_url:str)->str:
-        return helper_retrive_url(lyrics_url)
+        return helper_retrive_url(lyrics_url) # pragma: no cover
 
     def to_txt(self, lyrics):
         soup = bs(lyrics, "html.parser")
