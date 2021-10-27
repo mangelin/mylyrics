@@ -59,7 +59,7 @@ class MyLyricsCommand(object):
             self.show_version()
             sys.exit(0)
 
-        # Try to load from dick
+        # Try to load from disk
         lyrics = load(args.artist, args.lyrics)
         if lyrics:
             print(lyrics)
