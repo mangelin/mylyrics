@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, patch
 from unittest import TestCase
 from proxy import ProxyLyricsFactory
-from proxy.lyrics import LyricsRetriverProxy
+from proxy.abstractLyrics import AbstractLyricsRetriverProxy
 from proxy.azlyrics import AzlyricsProxy
 from proxy.elyrics import ElyricsProxy
 
@@ -20,7 +20,7 @@ class ProxyFactoryTestCase(TestCase):
         self.assertTrue(isinstance(res_el, ElyricsProxy))
 
 
-class TestAbstractProxy(TestCase, LyricsRetriverProxy):
+class TestAbstractProxy(TestCase, AbstractLyricsRetriverProxy):
     def setUp(self):
         self.to_txt_ret = fake.text()
         self.get_lyrics_ret = fake.text()

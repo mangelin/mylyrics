@@ -3,7 +3,7 @@ import os
 
 from config import OUTPUT_FORMAT
 
-class LyricsRetriverProxy(metaclass=ABCMeta):
+class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
     def __init__(self):
         self.outputs={
             'txt': self.to_txt

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as bs
 from urllib.parse import urljoin
 import re
 
-from .lyrics import LyricsRetriverProxy
+from .abstractLyrics import AbstractLyricsRetriverProxy
 
 # Helpers function
 def _locate_string_value(soup, string_value):
@@ -29,7 +29,7 @@ def _retrive_url(url:str):
     if r.status_code != 200:
         return None
     return r.text
-class ElyricsProxy(LyricsRetriverProxy):
+class ElyricsProxy(AbstractLyricsRetriverProxy):
     def __init__(self):
         super().__init__()
         self._name = "ELyrics"

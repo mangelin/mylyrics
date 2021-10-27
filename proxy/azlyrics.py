@@ -4,7 +4,7 @@ import requests, re
 
 from config import AZLYRICS_SEARCH_URL
 
-from .lyrics import LyricsRetriverProxy
+from .abstractLyrics import AbstractLyricsRetriverProxy
 
 # Helpers function
 def _locate_string_value(soup, string_value):
@@ -26,7 +26,7 @@ def _retrive_url(url:str):
     return r.text
 
 # AzLyrics.com proxy
-class AzlyricsProxy(LyricsRetriverProxy):
+class AzlyricsProxy(AbstractLyricsRetriverProxy):
     def __init__(self):
         super().__init__()
 
