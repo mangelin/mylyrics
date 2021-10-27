@@ -8,12 +8,6 @@ from .abstractLyrics import AbstractLyricsRetriverProxy
 from .helpers import helper_retrive_url
 
 # Helpers function
-def _locate_string_value(soup, string_value):
-    return soup.find(string=re.compile(string_value))
-
-def _locate_table(soup):
-    return soup.findNext("table")
-
 def _locate_anchor(soup, value):
     res = soup.find(string=re.compile(value))
     if not res:
@@ -37,11 +31,11 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
             return None
 
         soup = bs(r, "html.parser")
-        a_string = _locate_string_value(soup, "Artist result")
+        a_string = soup.find(string=re.compile("Artist result"))
         if not a_string:
             return None
 
-        t = _locate_table(a_string)
+        t = soup.findNext("table")
         if not t:
             return None
 
