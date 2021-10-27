@@ -16,8 +16,7 @@ def save(artist:str, song_name:str, lyrics:str):
     try:
         p = Path(artist_directory_name)
         p.mkdir(parents=True)
-    except Exception as e:
-        print(e)
+    except:
         pass
 
     file_name = os.path.join(artist_directory_name, f"{slugify(song_name)}.txt")

@@ -44,7 +44,7 @@ class AZLyricsTestCase(TestCase):
         mock_lat.return_value = True
         mock_lar.return_value = True
 
-        res = self.proxy.get_artist_page('foo')
+        res = self.proxy.get_artist_page_url('foo')
 
         self.assertEqual(res, self.expected_artist_link)
 
@@ -56,7 +56,7 @@ class AZLyricsTestCase(TestCase):
         
         mock_requests.return_value = req_mock
         
-        res = self.proxy.get_artist_page('foo')
+        res = self.proxy.get_artist_page_url('foo')
 
         self.assertIsNone(res)
 
@@ -71,7 +71,7 @@ class AZLyricsTestCase(TestCase):
         mock_requests.return_value = req_mock
         mock_lar.return_value = None
         
-        res = self.proxy.get_artist_page('foo')
+        res = self.proxy.get_artist_page_url('foo')
 
         self.assertIsNone(res)
 
@@ -88,7 +88,7 @@ class AZLyricsTestCase(TestCase):
         mock_lar.return_value = True
         mock_lat.return_value = None
         
-        res = self.proxy.get_artist_page('foo')
+        res = self.proxy.get_artist_page_url('foo')
 
         self.assertIsNone(res)
 
@@ -108,7 +108,7 @@ class AZLyricsTestCase(TestCase):
         mock_lat.return_value = True
         mock_laa.return_value = None
         
-        res = self.proxy.get_artist_page('foo')
+        res = self.proxy.get_artist_page_url('foo')
 
         self.assertIsNone(res)
 

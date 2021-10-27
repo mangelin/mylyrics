@@ -18,8 +18,8 @@ class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
         return inner
 
     @provided_by
-    def get_lyrics(self, artist: str, song_name:str, out_format:str=OUTPUT_FORMAT):
-        artist_page_url = self.get_artist_page(artist)
+    def get_lyrics(self, artist: str, song_name:str, out_format:str=OUTPUT_FORMAT)->str:
+        artist_page_url = self.get_artist_page_url(artist)
         if not artist_page_url:
             raise ValueError(f"Artist {artist} not found")
 
@@ -27,7 +27,7 @@ class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
         if not lyrics_url:
             raise ValueError(f"Url Lyrics for {song_name} by {artist} not found")
 
-        lyrics = self.retrive_lyrics(lyrics_url)
+        lyrics = self.fetch_lyric_content(lyrics_url)
         if not lyrics:
             raise ValueError(f"Lyrics for {song_name} by {artist} not found")
 
@@ -38,7 +38,7 @@ class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
     def name(self):
         return getattr(self,"_name","undefined")
     
-    def __format_result(self, lyrics:str, out_typ:str):
+    def __format_result(self, lyrics:str, out_typ:str)->str:
         outf = self.outputs[out_typ]
         if not outf:
             raise ValueError(f"Unknown output type {out_typ}")
@@ -46,15 +46,15 @@ class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
         return outf(lyrics)
 
     @abstractmethod
-    def get_artist_page(self, artist:str):
+    def get_artist_page_url(self, artist:str)->str:
         raise NotImplementedError # pragma: no cover
 
     @abstractmethod
-    def get_lyrics_url(self, artist_page_url:str, song_name:str):
+    def get_lyrics_url(self, artist_page_url:str, song_name:str)->str:
         raise NotImplementedError # pragma: no cover
 
     @abstractmethod
-    def retrive_lyrics(self, lyrics_url:str):
+    def fetch_lyric_content(self, lyrics_url:str)->str:
         raise NotImplementedError # pragma: no cover
 
     @abstractmethod

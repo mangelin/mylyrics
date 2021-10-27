@@ -34,7 +34,7 @@ class ElyricsProxy(AbstractLyricsRetriverProxy):
         super().__init__()
         self._name = "ELyrics"
 
-    def get_artist_page(self, artist:str):
+    def get_artist_page_url(self, artist:str)->str:
         r = _post_form(ELYRICS_SEARCH_URL,{'q':artist})
         if not r:
             return None
@@ -47,7 +47,7 @@ class ElyricsProxy(AbstractLyricsRetriverProxy):
 
         return urljoin("https://elyrics.net",a_string)
 
-    def get_lyrics_url(self, artist_page_url:str, song_name:str):
+    def get_lyrics_url(self, artist_page_url:str, song_name:str)->str:
         r = _retrive_url(artist_page_url)
         if not r:
             return None
@@ -63,7 +63,7 @@ class ElyricsProxy(AbstractLyricsRetriverProxy):
 
         return song_url
 
-    def retrive_lyrics(self, lyrics_url:str):
+    def fetch_lyric_content(self, lyrics_url:str)->str:
         return _retrive_url(lyrics_url)
 
     def to_txt(self, lyrics):

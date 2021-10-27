@@ -33,7 +33,7 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
         self._name = "AZLyrics"
         self._az_search_url = AZLYRICS_SEARCH_URL
 
-    def get_artist_page(self, artist:str):
+    def get_artist_page_url(self, artist:str)->str:
         r = _retrive_url(f"{self._az_search_url}{artist}")
         if not r:
             return None
@@ -53,7 +53,7 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
 
         return anchor.get("href")
 
-    def get_lyrics_url(self, artist_page_url:str, song_name:str):
+    def get_lyrics_url(self, artist_page_url:str, song_name:str)->str:
         r = _retrive_url(artist_page_url)
         if not r:
             return None
@@ -69,7 +69,7 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
 
         return song_url
 
-    def retrive_lyrics(self, lyrics_url:str):
+    def fetch_lyric_content(self, lyrics_url:str)->str:
         return _retrive_url(lyrics_url)
 
     def to_txt(self, lyrics):

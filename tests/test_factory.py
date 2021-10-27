@@ -28,13 +28,13 @@ class TestAbstractProxy(TestCase, AbstractLyricsRetriverProxy):
         self.get_artist_page_ret = fake.url()
         self.outputs = {'txt' : self.to_txt}
 
-    def get_artist_page(self, artist:str):
+    def get_artist_page_url(self, artist:str):
         return self.get_artist_page_ret
 
     def get_lyrics_url(self, artist_page_url:str, song_name:str):
         return self.get_lyrics_url_ret
     
-    def retrive_lyrics(self, lyrics:str):
+    def fetch_lyric_content(self, lyrics:str):
         return self.get_lyrics_ret
 
     def to_txt(self, lyrics:str):
