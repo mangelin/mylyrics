@@ -1,0 +1,3 @@
+pytest==6.2.5         # https://pypi.org/project/pytest/
+coverage==6.0.2       # https://pypi.org/project/coverage/
+Faker==9.6.0          # https://pypi.org/project/Faker/
