@@ -50,7 +50,7 @@ class ElyricsProxy(AbstractLyricsRetriverProxy):
 
         soup = bs(r, "html.parser")
 
-        song_relative_url = _get_song_relative_url(f" {song_name.title()}")
+        song_relative_url = _get_song_relative_url(soup, song_name.title())
         if not song_relative_url:
             return None
 
