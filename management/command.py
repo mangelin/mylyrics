@@ -10,21 +10,21 @@ from proxy import ProxyLyricsFactory
 from config import DEFAULT_SAVE_DIRECTORY
 
 
-def save(artist:str, song_name:str, lyrics:str):
+def save_to_folder(artist:str, song_name:str, lyrics:str):
     artist_directory_name = f"{DEFAULT_SAVE_DIRECTORY}/{slugify(artist)}"
     
     try:
         p = Path(artist_directory_name)
         p.mkdir(parents=True)
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
     file_name = os.path.join(artist_directory_name, f"{slugify(song_name)}.txt")
 
     with open(file_name,"w+") as f:
         f.write(lyrics)
 
-def load(artist:str, song_name:str):
+def load_from_folder(artist:str, song_name:str):
     artist_directory_name = f"{DEFAULT_SAVE_DIRECTORY}/{slugify(artist)}"
     file_name = os.path.join(artist_directory_name, f"{slugify(song_name)}.txt")
 
@@ -32,8 +32,8 @@ def load(artist:str, song_name:str):
     try:
         with open(file_name, 'r') as f:
             data = f.read()
-    except:
-        pass
+    except Exception as e:
+        print(e)
     
     return data
 
@@ -49,7 +49,7 @@ class MyLyricsCommand(object):
         self.factory = ProxyLyricsFactory()
 
     def show_version(self):
-        print(f"\nMyLyrics {version}")
+        sys.stdout.write(f"\nMyLyrics {version}")
 
     def handle_command(self):
         args = self.parser.parse_args()
@@ -60,9 +60,9 @@ class MyLyricsCommand(object):
             sys.exit(0)
 
         # Try to load from disk
-        lyrics = load(args.artist, args.lyrics)
+        lyrics = load_from_folder(args.artist, args.lyrics)
         if lyrics:
-            print(lyrics)
+            sys.stdout.write(lyrics)
             sys.exit(0)
 
         
@@ -71,12 +71,10 @@ class MyLyricsCommand(object):
         lyrics = provider.get_lyrics(args.artist, args.lyrics)
     
         if not lyrics:
-            print(f"No lyrics fount to {args.lyrics} by {args.artist}")
+            sys.stdout.write(f"No lyrics found to {args.lyrics} by {args.artist}")
             sys.exit(0)
         
-        print(lyrics)
+        sys.stdout.write(lyrics)
 
         if args.save:
-            save(args.artist, args.lyrics, lyrics)
-
-
+            save_to_folder(args.artist, args.lyrics, lyrics)
