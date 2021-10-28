@@ -50,7 +50,6 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
         soup = bs(r, "html.parser")
 
         song_relative_url = _locate_anchor(soup, song_name)
-        print('----> song url:',song_relative_url)
         if not song_relative_url:
             return None
 
