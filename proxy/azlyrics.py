@@ -13,6 +13,7 @@ def _locate_anchor(soup, value):
     if not res:
         return None
     anchor = res.findParent("a")
+
     if not anchor:
         return None
     return anchor.get("href")
@@ -35,7 +36,7 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
         if not a_string:
             return None
 
-        t = soup.findNext("table")
+        t = a_string.findNext("table")
         if not t:
             return None
 
@@ -49,6 +50,7 @@ class AzlyricsProxy(AbstractLyricsRetriverProxy):
         soup = bs(r, "html.parser")
 
         song_relative_url = _locate_anchor(soup, song_name)
+        print('----> song url:',song_relative_url)
         if not song_relative_url:
             return None
 
