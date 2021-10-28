@@ -1,9 +1,10 @@
 from unittest.mock import MagicMock, patch
 from unittest import TestCase
+from io import StringIO
+
+import config
 from proxy import ProxyLyricsFactory
 from proxy.abstractLyrics import AbstractLyricsRetriverProxy
-from proxy.azlyrics import AzlyricsProxy
-from proxy.elyrics import ElyricsProxy
 
 from tests import fake
 
@@ -12,13 +13,15 @@ class ProxyFactoryTestCase(TestCase):
         self.factory = ProxyLyricsFactory()
 
     def test_proxy_factory(self):
-        
-        res_az = self.factory.create_proxy("azlyrics")
-        self.assertTrue(isinstance(res_az, AzlyricsProxy))
+        for provider in config.providers():
+            res = self.factory.create_proxy(provider)
+            self.assertIsNotNone(res)
 
-        res_el = self.factory.create_proxy("elyrics")
-        self.assertTrue(isinstance(res_el, ElyricsProxy))
+    @patch('proxy.config')
+    def test_proxy_factory_exception(self, mock_config):
+        mock_config.providers.return_value = [fake.name()]
 
+        self.assertRaises(ValueError, lambda: self.factory.create_proxy(fake.name()))
 
 class TestAbstractProxy(TestCase, AbstractLyricsRetriverProxy):
     def setUp(self):

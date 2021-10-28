@@ -43,37 +43,40 @@ def load_from_folder(artist:str, song_name:str):
     return data
 
 class MyLyricsCommand(object):
+    factory = ProxyLyricsFactory()
+
     def __init__(self):
         self.parser = argparse.ArgumentParser()
         self.parser.add_argument("-a", "--artist", required=True, help="provide artist name")
         self.parser.add_argument("-l", "--lyrics", required=True, help="provide a lyrics name")
         self.parser.add_argument("-s", "--save",action="store_true",default=False, help="save the song in artist's folder")
-        self.parser.add_argument("-p", "--provider", required=True, help="lyrics provider")
+        self.parser.add_argument("-p", "--provider", required=True, help="lyrics provider [azlyrics,elyrics]")
         self.parser.add_argument("--version", action="store_true", help="show mylyrics version")
-
-        self.factory = ProxyLyricsFactory()
 
     def show_version(self):
         sys.stdout.write(f"\nMyLyrics {version}")
 
+    def parse_args(self):
+        return self.parser.parse_args() # pragma: no cover
+
     def handle_command(self):
-        args = self.parser.parse_args()
+        args = self.parse_args()
         lyrics = None
 
         if args.version:
             self.show_version()
-            sys.exit(0)
+            return
 
         # Try to load from disk
         lyrics = load_from_folder(args.artist, args.lyrics)
         if lyrics:
             sys.stdout.write(lyrics)
             return
-
+        
+        # Create provider
+        provider = self.factory.create_proxy(args.provider)
         
         # Try to fetch lyrics by provider
-        provider = self.factory.create_proxy(args.provider)
-
         try:
             lyrics = provider.get_lyrics(args.artist, args.lyrics)
         except ValueError as e:
@@ -83,7 +86,8 @@ class MyLyricsCommand(object):
             sys.stdout.write(f"No lyrics found to {args.lyrics} by {args.artist}")
             return
         
-        sys.stdout.write(lyrics+"\n\n")
+        print(lyrics)
+        #sys.stdout.write(lyrics+"\n\n")
 
         if args.save:
             save_to_folder(args.artist, args.lyrics, lyrics)
