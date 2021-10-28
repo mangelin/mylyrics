@@ -44,8 +44,8 @@ class AZLyricsTestCase(TestCase):
             mock_bs,
             mock_requests):
 
-        self.mock_soup.find.return_value = True
-        self.mock_soup.findNext.return_value = True
+        self.mock_soup.find.return_value = Mock()
+        self.mock_soup.findNext.return_value = Mock()
         mock_bs.return_value = self.mock_soup
 
         req_mock = MagicMock()
@@ -94,8 +94,11 @@ class AZLyricsTestCase(TestCase):
         req_mock.status_code = 200
         req_mock.text = f"<html><body><p>{fake.text()}</p></body></html>"
         
+        artist_section_mock  = Mock()
+        artist_section_mock.findNext.return_value = None
+
         mock_requests.return_value = req_mock
-        self.mock_soup.find.return_value = True
+        self.mock_soup.find.return_value = artist_section_mock 
         mock_bs.return_value = self.mock_soup
 
         res = self.proxy.get_artist_page_url('foo')
@@ -113,8 +116,8 @@ class AZLyricsTestCase(TestCase):
         req_mock.text = f"<html><body><p>{fake.text()}</p></body></html>"
         
         mock_requests.return_value = req_mock
-        self.mock_soup.find.return_value = True
-        self.mock_soup.findNext.return_value = True
+        self.mock_soup.find.return_value = Mock()
+        self.mock_soup.findNext.return_value = Mock()
         mock_bs.return_value = self.mock_soup
         mock_laa.return_value = None
         
