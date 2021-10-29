@@ -20,10 +20,10 @@ register_provider(ELYRICS_PROXY)
 
 # ENVS
 #############################################################
-AZLYRICS_SEARCH_URL = os.getenv("AZLYRICS_SEARCH_URL")
-ELYRICS_BASE_URL = os.getenv("ELYRICS_BASE_URL")
+AZLYRICS_SEARCH_URL = os.getenv("AZLYRICS_SEARCH_URL","https://search.azlyrics.com/search.php?q=")
+ELYRICS_BASE_URL = os.getenv("ELYRICS_BASE_URL","https://www.elyrics.net")
 ELYRICS_SEARCH_URL = f"{ELYRICS_BASE_URL}/find.php"
-OUTPUT_FORMAT = os.getenv("DEFAULT_OUTPUT_FORMAT")
+OUTPUT_FORMAT = os.getenv("DEFAULT_OUTPUT_FORMAT","txt")
 DEFAULT_SAVE_DIRECTORY = os.getenv("DEFAULT_SAVE_DIRECTORY", os.curdir)
 
 # USER CONFIG
