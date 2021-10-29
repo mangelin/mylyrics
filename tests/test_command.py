@@ -14,6 +14,8 @@ from management.command import (
     load_from_folder
 )
 from proxy import ProxyLyricsFactory
+from .factory import CommandParserFactory
+
 
 providers = config.providers()
 
@@ -42,8 +44,7 @@ class MyLyricsCommandTestCase(TestCase):
 
     def test_handle_command_show_version(self):
         with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
-            mock_args = Mock()
-            mock_args.version = True
+            mock_args = CommandParserFactory.create_args(version=True)
             mock_parse_args.return_value = mock_args
             with patch('sys.stdout', new = StringIO()) as fake_out:
                 self.cmd.handle_command()
@@ -55,11 +56,12 @@ class MyLyricsCommandTestCase(TestCase):
         mock_load.return_value = self.lyrics
 
         with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
-            mock_args = Mock()
-            mock_args.version = False
-            mock_args.artists = self.artist
-            mock_args.song = self.song
-            mock_args.provider = self.provider
+            mock_args = CommandParserFactory.create_args(
+                version=False, 
+                artist=self.artist,
+                lyrics = self.song,
+                provider = self.provider
+            )
             mock_parse_args.return_value = mock_args
             with patch('sys.stdout', new = StringIO()) as fake_out:
                 self.cmd.handle_command()
@@ -74,11 +76,12 @@ class MyLyricsCommandTestCase(TestCase):
         mock_load.return_value = None
 
         with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
-            mock_args = Mock()
-            mock_args.version = False
-            mock_args.artists = self.artist
-            mock_args.song = self.song
-            mock_args.provider = self.provider
+            mock_args = CommandParserFactory.create_args(
+                version=False, 
+                artist=self.artist,
+                lyrics = self.song,
+                provider = self.provider
+            )
             mock_parse_args.return_value = mock_args
             with pytest.raises(SystemExit) as pytest_wrapped_e:
                 self.cmd.handle_command()
@@ -97,12 +100,14 @@ class MyLyricsCommandTestCase(TestCase):
 
         with patch("management.command.MyLyricsCommand.factory", self.factory):
             with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
-                mock_args = Mock()
-                mock_args.version = False
-                mock_args.artists = self.artist
-                mock_args.song = self.song
-                mock_args.provider = self.provider
-                mock_args.save = False
+                mock_args = CommandParserFactory.create_args(
+                    version=False, 
+                    artist=self.artist,
+                    lyrics = self.song,
+                    provider = self.provider,   
+                    save = False
+                )
+             
                 mock_parse_args.return_value = mock_args
 
                 with pytest.raises(SystemExit) as pytest_wrapped_e:
@@ -120,17 +125,18 @@ class MyLyricsCommandTestCase(TestCase):
 
 
     @patch("management.command.load_from_folder")
-    def test_handle_command_all_ok(self,mock_load):
+    def test_handle_command_all_ok_no_save(self,mock_load):
         
         mock_load.return_value = False
         with patch("management.command.MyLyricsCommand.factory", self.factory):
             with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
-                mock_args = Mock()
-                mock_args.version = False
-                mock_args.artists = self.artist
-                mock_args.song = self.song
-                mock_args.provider = self.provider
-                mock_args.save = False
+                mock_args = CommandParserFactory.create_args(
+                    version=False, 
+                    artist=self.artist,
+                    lyrics=self.song,
+                    provider=self.provider,   
+                    save=False
+                )
                 mock_parse_args.return_value = mock_args
 
                 with patch('sys.stdout', new = StringIO()) as fake_out:
@@ -139,17 +145,19 @@ class MyLyricsCommandTestCase(TestCase):
 
     @patch("management.command.Path")
     @patch("management.command.load_from_folder")
-    def test_handle_command_all_ok(self,mock_load, mock_path):
+    def test_handle_command_all_ok_and_save(self,mock_load, mock_path):
         
         mock_load.return_value = False
         with patch("management.command.MyLyricsCommand.factory", self.factory):
             with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
-                mock_args = Mock()
-                mock_args.version = False
-                mock_args.artist = self.artist
-                mock_args.lyrics = self.song
-                mock_args.provider = self.provider
-                mock_args.save = True
+                mock_args = CommandParserFactory.create_args(
+                    version=False, 
+                    artist=self.artist,
+                    lyrics =self.song,
+                    provider=self.provider,   
+                    save=True
+                )
+                
                 mock_parse_args.return_value = mock_args
 
                 mock_open = mock.mock_open()
