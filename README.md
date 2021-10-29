@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/mangelin/mylyrics.svg?branch=main)](https://app.travis-ci.com/mangelin/mylyrics)
+
 # MyLyrics
 
 Welcome to `mylyrics` a simple Command Line Interface (CLI) to download lyrics of your preferred songs.
