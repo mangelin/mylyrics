@@ -65,6 +65,28 @@ class MyLyricsCommandTestCase(TestCase):
                 self.cmd.handle_command()
                 self.assertEqual(fake_out.getvalue(), self.lyrics)
 
+    @patch("requests.get")
+    @patch("requests.post")
+    @patch("management.command.load_from_folder")
+    def test_handle_command_requests_error(self,mock_load, mock_post, mock_get):
+        mock_post.side_effect = Exception
+        mock_get.side_effect = Exception
+        mock_load.return_value = None
+
+        with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
+            mock_args = Mock()
+            mock_args.version = False
+            mock_args.artists = self.artist
+            mock_args.song = self.song
+            mock_args.provider = self.provider
+            mock_parse_args.return_value = mock_args
+            with pytest.raises(SystemExit) as pytest_wrapped_e:
+                self.cmd.handle_command()
+                self.assertEqual(pytest_wrapped_e.type, SystemExit)
+                self.assertIn("unexpected error:",str(pytest_wrapped_e.type))
+
+    
+
     @patch("management.command.load_from_folder")
     def test_handle_command_lyrics_error(self,mock_load):
         

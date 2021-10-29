@@ -81,6 +81,8 @@ class MyLyricsCommand(object):
             lyrics = provider.get_lyrics(args.artist, args.lyrics)
         except ValueError as e:
             sys.exit(f"{e}\n")
+        except Exception as ue:
+            sys.exit(f"unexpected error: {ue}\n")
     
         if not lyrics:
             sys.stdout.write(f"No lyrics found to {args.lyrics} by {args.artist}")

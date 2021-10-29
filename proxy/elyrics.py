@@ -25,6 +25,7 @@ def _get_song_relative_url(soup, song_name:str):
         
     return song_label.parent['href'] if song_label.parent else None
     
+# ELyrics concreate proxy
 class ElyricsProxy(AbstractLyricsRetriverProxy):
     def __init__(self):
         super().__init__()

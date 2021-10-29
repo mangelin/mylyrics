@@ -55,7 +55,7 @@ class AZLyricsTestCase(TestCase):
         mock_requests.return_value = req_mock
         mock_laa.return_value = self.expected_artist_link
         
-        res = self.proxy.get_artist_page_url('foo')
+        res = self.proxy.get_artist_page_url(fake.name())
 
         self.assertEqual(res, self.expected_artist_link)
 
@@ -67,9 +67,12 @@ class AZLyricsTestCase(TestCase):
         
         mock_requests.return_value = req_mock
         
-        res = self.proxy.get_artist_page_url('foo')
+        res = self.proxy.get_artist_page_url(fake.name())
 
         self.assertIsNone(res)
+
+        mock_requests.side_effect = Exception
+        self.assertRaises(Exception,lambda: self.proxy.get_artist_page_url(fake.name()))
 
     @patch("proxy.azlyrics.bs")
     @patch("requests.get")
@@ -82,7 +85,7 @@ class AZLyricsTestCase(TestCase):
         mock_requests.return_value = req_mock
         mock_bs.return_value = self.mock_soup
         
-        res = self.proxy.get_artist_page_url('foo')
+        res = self.proxy.get_artist_page_url(fake.name())
 
         self.assertIsNone(res)
 
@@ -101,7 +104,7 @@ class AZLyricsTestCase(TestCase):
         self.mock_soup.find.return_value = artist_section_mock 
         mock_bs.return_value = self.mock_soup
 
-        res = self.proxy.get_artist_page_url('foo')
+        res = self.proxy.get_artist_page_url(fake.name())
 
         self.assertIsNone(res)
 
@@ -121,7 +124,7 @@ class AZLyricsTestCase(TestCase):
         mock_bs.return_value = self.mock_soup
         mock_laa.return_value = None
         
-        res = self.proxy.get_artist_page_url('foo')
+        res = self.proxy.get_artist_page_url(fake.name())
 
         self.assertIsNone(res)
 
@@ -130,7 +133,7 @@ class AZLyricsTestCase(TestCase):
     def test_get_lyrics_url_ko(self, mock_retrive_url):
         mock_retrive_url.return_value = None
 
-        res = self.proxy.get_lyrics_url('foo','bar')
+        res = self.proxy.get_lyrics_url(fake.name(),fake.name())
 
         self.assertIsNone(res)
 
@@ -140,13 +143,13 @@ class AZLyricsTestCase(TestCase):
         mock_retrive_url.return_value = f"<html><body><p>{fake.text()}</p></body></html>"
         mock_locate_anchor.return_value = self.song_relative_url
 
-        res = self.proxy.get_lyrics_url(self.artist_page_url,'bar')
+        res = self.proxy.get_lyrics_url(self.artist_page_url,fake.name())
 
         self.assertEqual(res, f"{self.artist_page_url}{self.song_relative_url}")
 
         mock_locate_anchor.return_value = None
 
-        res = self.proxy.get_lyrics_url(self.artist_page_url,'bar')
+        res = self.proxy.get_lyrics_url(self.artist_page_url,fake.name())
 
         self.assertIsNone(res)
 
@@ -160,7 +163,7 @@ class AZLyricsTestCase(TestCase):
         mock_soup.find = MagicMock(return_value=mock_div)
         mock_bs.return_value = mock_soup
 
-        res = self.proxy.to_txt('foo')
+        res = self.proxy.to_txt(fake.name())
 
         self.assertTrue(res, self.expected_lyrics)
     
@@ -173,14 +176,14 @@ class AZLyricsHelpersTestCase(TestCase):
     def test_locate_anchor_ko(self):
         self.mock_soup.find = MagicMock(return_value=None)
 
-        res = _locate_anchor(self.mock_soup,'foo')
+        res = _locate_anchor(self.mock_soup,fake.name())
 
         self.assertIsNone(res)
 
         self.mock_res.findParent = MagicMock(return_value=None)
         self.mock_soup.find = MagicMock(return_value=self.mock_res)
 
-        res = _locate_anchor(self.mock_soup,'foo')
+        res = _locate_anchor(self.mock_soup,fake.name())
 
         self.assertIsNone(res)
 
@@ -188,6 +191,6 @@ class AZLyricsHelpersTestCase(TestCase):
         self.mock_res.findParent = MagicMock(return_value={'href':self.uri})
         self.mock_soup.find = MagicMock(return_value=self.mock_res)
 
-        res = _locate_anchor(self.mock_soup,'foo')
+        res = _locate_anchor(self.mock_soup,fake.name())
 
         self.assertEqual(res, self.uri)

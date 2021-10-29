@@ -43,7 +43,12 @@ class ELyricsProxyTestCase(TestCase):
 
         res = self.proxy.get_artist_page_url(fake.name())
         self.assertIsNone(res)
-    
+
+    @patch("requests.post")
+    def test_get_artist_page_url_request_exception(self, mock_post):
+        mock_post.side_effect = Exception
+        self.assertRaises(Exception, lambda: self.proxy.get_artist_page_url(fake.name()))
+
     @patch("proxy.elyrics.helper_post_form")
     @patch("proxy.elyrics._locate_string_value")
     @patch("proxy.elyrics.bs")

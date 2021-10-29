@@ -18,7 +18,8 @@ def _locate_anchor(soup, value):
         return None
     return anchor.get("href")
 
-# AzLyrics.com proxy
+
+# AZLyrics concrete proxy
 class AzlyricsProxy(AbstractLyricsRetriverProxy):
     def __init__(self):
         super().__init__()
