@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.2.1] - 2021-10-29
+
+### Added
+
+* Add changelog
 ## [0.2.0] - 2021-10-28
 
 ### Added
@@ -25,8 +30,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * first commit
-
-
-[Unreleased]: https://bitbucket.org/epriceit/it.eprice.ucm/branches/compare/v0.2.0..HEAD
-[0.2.0]: https://bitbucket.org/epriceit/it.eprice.ucm/branches/compare/v0.2.0..v0.1.0
-[0.1.0]: https://bitbucket.org/epriceit/it.eprice.ucm/branches/compare/v0.1.0..v0.1.0
