@@ -87,7 +87,7 @@ $ coverage html
 
 and open with your preferred browser "htmlcov/index.html"
 
-### Add more providers
+## Add more providers
 
 In order to add e new provider you need to follow this steps:
 
@@ -95,7 +95,7 @@ In order to add e new provider you need to follow this steps:
 * register the provider in config module
 * that's all
 
-## Create a provider implementing AbstractLyricsRetriverProxy interface
+### Create a provider implementing AbstractLyricsRetriverProxy interface
 
 Open the project folder with your preferred editor and add a new file in proxy 
 module folder:
@@ -175,7 +175,7 @@ class Myawesomeproxy(AbstractLyricsRetriverProxy):
 
 `NOTE` : class name must be a capitalized string.
 
-## Registering the new provider
+### Registering the new provider
 
 To register a new provider so that can be available for user, you have to
 add some code in `config` module. Open `config/.__init__.py` file with your
