@@ -9,3 +9,6 @@ install:
 script:
   - coverage run -m pytest
   - coverage xml
+
+after_success:
+  - codecov
