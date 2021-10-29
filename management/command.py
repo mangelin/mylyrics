@@ -6,12 +6,11 @@ import os
 from pathlib import Path
 from management import __version__ as version
 from proxy import ProxyLyricsFactory
-
-from config import DEFAULT_SAVE_DIRECTORY
+import config
 
 
 def save_to_folder(artist:str, song_name:str, lyrics:str):
-    artist_directory_name = f"{DEFAULT_SAVE_DIRECTORY}/{slugify(artist)}"
+    artist_directory_name = f"{config.DEFAULT_SAVE_DIRECTORY}/{slugify(artist)}"
     
     try:
         p = Path(artist_directory_name)
@@ -28,7 +27,7 @@ def save_to_folder(artist:str, song_name:str, lyrics:str):
 
     
 def load_from_folder(artist:str, song_name:str):
-    artist_directory_name = f"{DEFAULT_SAVE_DIRECTORY}/{slugify(artist)}"
+    artist_directory_name = f"{config.DEFAULT_SAVE_DIRECTORY}/{slugify(artist)}"
     file_name = os.path.join(artist_directory_name, f"{slugify(song_name)}.txt")
 
     data = None
@@ -50,7 +49,7 @@ class MyLyricsCommand(object):
         self.parser.add_argument("-a", "--artist", required=True, help="provide artist name")
         self.parser.add_argument("-l", "--lyrics", required=True, help="provide a lyrics name")
         self.parser.add_argument("-s", "--save",action="store_true",default=False, help="save the song in artist's folder")
-        self.parser.add_argument("-p", "--provider", required=True, help="lyrics provider [azlyrics,elyrics]")
+        self.parser.add_argument("-p", "--provider", required=True, help=f"lyrics provider [{','.join(config.providers())}]")
         self.parser.add_argument("--version", action="store_true", help="show mylyrics version")
 
     def show_version(self):
