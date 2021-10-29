@@ -11,4 +11,4 @@ script:
   - coverage xml
 
 after_success:
-  - codecov
+  - codecov -t ${{ secrets.CODECOV_TOKEN }}
