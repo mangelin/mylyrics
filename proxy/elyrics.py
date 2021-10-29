@@ -19,7 +19,7 @@ def _locate_string_value(soup, string_value):
     return a_string.parent['href'] if a_string.parent else None
 
 def _get_song_relative_url(soup, song_name:str):
-    song_label = soup.find(string=re.compile(f" {song_name.title()}"))
+    song_label = soup.find(string=re.compile(f"{song_name.title()}", re.IGNORECASE))
     if not song_label:
         return None
         

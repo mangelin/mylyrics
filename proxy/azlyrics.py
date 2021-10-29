@@ -9,7 +9,7 @@ from .helpers import helper_retrive_url
 
 # Helpers function
 def _locate_anchor(soup, value):
-    res = soup.find(string=re.compile(value))
+    res = soup.find(string=re.compile(value, re.IGNORECASE))
     if not res:
         return None
     anchor = res.findParent("a")
