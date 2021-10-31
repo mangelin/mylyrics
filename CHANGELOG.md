@@ -13,10 +13,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+
+## [0.3.1] - 2021-11-31
+
+### Added
+
+* custom exception for readability
 ## [0.3.0] - 2021-10-29
+
+### Added
 
 * Improved regexp to search artist/songs 
 * Add codecov support
+
+### Changed
+
 * Update commands to list dynamically the list of
 supported providers
 ## [0.2.2] - 2021-10-29
