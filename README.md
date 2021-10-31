@@ -5,7 +5,7 @@
 
 Welcome to `mylyrics` a simple Command Line Interface (CLI) to download lyrics of your preferred songs.
 
-`mylyrics` is able to download lyrics from different provider (check the above paragraph to know witch providers are actually supported).
+`mylyrics` is able to download lyrics from different provider (check the below paragraph to know witch providers are actually supported).
 
 ### Quickstart
 
