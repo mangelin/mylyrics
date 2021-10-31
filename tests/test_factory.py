@@ -5,6 +5,7 @@ from io import StringIO
 import config
 from proxy import ProxyLyricsFactory
 from proxy.abstractLyrics import AbstractLyricsRetriverProxy
+from proxy.excpetion import ArtistNotFoundException, LyricNotFoundException, OutputTypeNotFound
 
 from tests import fake
 
@@ -50,24 +51,24 @@ class TestAbstractProxy(TestCase, AbstractLyricsRetriverProxy):
     def test_behaviour_ko_lyrics_url(self):
         self.get_lyrics_url_ret = None
 
-        self.assertRaises(ValueError, lambda: self.get_lyrics('foo','bar'))
+        self.assertRaises(LyricNotFoundException, lambda: self.get_lyrics('foo','bar'))
 
     def test_behaviour_ko_artist_page(self):
         self.get_artist_page_ret = None
 
-        self.assertRaises(ValueError, lambda: self.get_lyrics('foo','bar'))
+        self.assertRaises(ArtistNotFoundException, lambda: self.get_lyrics('foo','bar'))
 
     def test_behaviour_ko_lyrics(self):
         self.get_lyrics_ret = None
 
-        self.assertRaises(ValueError, lambda: self.get_lyrics('foo','bar'))
+        self.assertRaises(LyricNotFoundException, lambda: self.get_lyrics('foo','bar'))
 
     def test_format_result(self):
         ret = self._format_result('foo','txt')
         
         self.assertEqual(ret, self.to_txt_ret)
 
-        self.assertRaises(ValueError, lambda: self._format_result('foo','xml'))
+        self.assertRaises(OutputTypeNotFound, lambda: self._format_result('foo','xml'))
 
 
 

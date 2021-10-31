@@ -2,7 +2,11 @@ from abc import ABCMeta, abstractmethod
 import os
 
 from config import OUTPUT_FORMAT
-
+from .excpetion import (
+    ArtistNotFoundException,
+    LyricNotFoundException,
+    OutputTypeNotFound
+)
 class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
     def __init__(self):
         self.outputs={
@@ -35,15 +39,15 @@ class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
     def get_lyrics(self, artist: str, song_name:str, out_format:str=OUTPUT_FORMAT)->str:
         artist_page_url = self.get_artist_page_url(artist)
         if not artist_page_url:
-            raise ValueError(f"Artist {artist} not found")
+            raise ArtistNotFoundException(f"Artist {artist} not found")
 
         lyrics_url = self.get_lyrics_url(artist_page_url, song_name)
         if not lyrics_url:
-            raise ValueError(f"Url Lyrics for {song_name} by {artist} not found")
+            raise LyricNotFoundException(f"Url Lyrics for {song_name} by {artist} not found")
 
         lyrics = self.fetch_lyric_content(lyrics_url)
         if not lyrics:
-            raise ValueError(f"Lyrics for {song_name} by {artist} not found")
+            raise LyricNotFoundException(f"Lyrics for {song_name} by {artist} not found")
 
         return self._format_result(lyrics, out_format)
         
@@ -55,7 +59,7 @@ class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
     def _format_result(self, lyrics:str, out_typ:str)->str:
         outf = self.outputs.get(out_typ)
         if not outf:
-            raise ValueError(f"Unknown output type {out_typ}")
+            raise OutputTypeNotFound(f"Unknown output type {out_typ}")
 
         return outf(lyrics)
 
