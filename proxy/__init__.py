@@ -1,8 +1,3 @@
-from .abstractLyrics import (
-    ArtistNotFoundException,
-    LyricNotFoundException,
-    OutputTypeNotFound
-)
 from .azlyrics import AzlyricsProxy
 from .elyrics import ElyricsProxy
 import config
