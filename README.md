@@ -30,6 +30,29 @@ The `-h` flag show you all the available options:
 $ python mylyrics.py -h
 ```
 
+### Environment
+
+You can customize environment variables for the followings value:
+
+* Providers base and search url
+* Output format (currently sonly txt file format is supported)
+* Default save directory.
+
+#### Providers variables
+
+* AZLYRICS_BASE_URL
+* ELYRICS_BASE_URL
+* AZLYRICS_SEARCH_URL
+* ELYRICS_SEARCH_URL
+
+#### Output format
+
+* DEFAULT_OUTPUT_FORMAT
+
+#### Default save directory
+
+* DEFAULT_SAVE_DIRECTORY
+
 ## Installation
 
 ### Prerequisite
