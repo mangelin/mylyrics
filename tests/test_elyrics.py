@@ -18,8 +18,7 @@ class ELyricsProxyTestCase(TestCase):
         self.expected_artist_link = fake.url()
 
         self.proxy_name = config.ELYRICS_PROXY.lower()
-        self.factory = ProxyLyricsFactory()
-        self.proxy = self.factory.create_proxy(self.proxy_name)
+        self.proxy = ProxyLyricsFactory.get(self.proxy_name)
 
         self.artist_url = fake.uri_path()
         self.song_relative_url = fake.uri_path()
