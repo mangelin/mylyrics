@@ -10,19 +10,18 @@ from proxy.excpetion import ArtistNotFoundException, LyricNotFoundException, Out
 from tests import fake
 
 class ProxyFactoryTestCase(TestCase):
-    def setUp(self):
-        self.factory = ProxyLyricsFactory()
-
+    
     def test_proxy_factory(self):
         for provider in config.providers():
-            res = self.factory.create_proxy(provider)
+            print(provider)
+            res = ProxyLyricsFactory.get(provider)
             self.assertIsNotNone(res)
 
     @patch('proxy.config')
     def test_proxy_factory_exception(self, mock_config):
         mock_config.providers.return_value = [fake.name()]
 
-        self.assertRaises(ValueError, lambda: self.factory.create_proxy(fake.name()))
+        self.assertIsNone(ProxyLyricsFactory.get(fake.name()))
 
 class TestAbstractProxy(TestCase, AbstractLyricsRetriverProxy):
     def setUp(self):

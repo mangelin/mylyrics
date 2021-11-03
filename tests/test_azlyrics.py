@@ -15,8 +15,7 @@ class AZLyricsTestCase(TestCase):
         self.expected_artist_link = fake.url()
 
         self.proxy_name = config.AZLYRICS_PROXY.lower()
-        self.factory = ProxyLyricsFactory()
-        self.proxy = self.factory.create_proxy(self.proxy_name)
+        self.proxy = ProxyLyricsFactory.get(self.proxy_name)
 
         self.artist_page_url = fake.url()
         self.song_relative_url = fake.uri_path()
@@ -32,7 +31,7 @@ class AZLyricsTestCase(TestCase):
     def test_get_lyrics(self,mock_get_lyrics):
         mock_get_lyrics.return_value = self.expected_lyrics
         
-        p = self.factory.create_proxy(self.proxy_name)
+        p = ProxyLyricsFactory.get(self.proxy_name)
 
         self.assertEqual(p.get_lyrics(self.expected_artist,self.expected_songname), self.expected_lyrics)
 

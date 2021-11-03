@@ -1,21 +1,18 @@
-from unittest.mock import MagicMock, Mock, patch, create_autospec
-from unittest import TestCase
-from unittest import mock
-from tests import fake
-import pytest
 from io import StringIO
 from random import randrange
+from unittest import TestCase, mock
+from unittest.mock import MagicMock, Mock, create_autospec, patch
 
 import config
+import pytest
 from management import MyLyricsCommand
 from management import __version__ as version
-from management.command import (
-    save_to_folder,
-    load_from_folder
-)
+from management.command import get_providers, get_providers, load_from_folder, save_to_folder
 from proxy import ProxyLyricsFactory
-from .factory import CommandParserFactory
 
+from tests import fake
+
+from .factory import CommandParserFactory
 
 providers = config.providers()
 
@@ -32,8 +29,13 @@ class MyLyricsCommandTestCase(TestCase):
         self.fake_proxy = Mock()
         self.fake_proxy.get_lyrics.return_value = self.lyrics
 
-        self.factory = create_autospec(ProxyLyricsFactory)
-        self.factory.create_proxy.return_value = self.fake_proxy
+        self.factory = Mock()
+        self.factory.get.return_value = self.fake_proxy
+        self.factory.values.return_value = [self.fake_proxy,self.fake_proxy]
+
+        self.factory_no_provider = Mock()
+        self.factory_no_provider.get.return_value = None
+        
 
 
     
@@ -83,10 +85,9 @@ class MyLyricsCommandTestCase(TestCase):
                 provider = self.provider
             )
             mock_parse_args.return_value = mock_args
-            with pytest.raises(SystemExit) as pytest_wrapped_e:
+            with patch('sys.stdout', new = StringIO()) as fake_out:
                 self.cmd.handle_command()
-                self.assertEqual(pytest_wrapped_e.type, SystemExit)
-                self.assertIn("unexpected error:",str(pytest_wrapped_e.type))
+                self.assertIn("unexpected error:",fake_out.getvalue())
 
     
 
@@ -98,7 +99,7 @@ class MyLyricsCommandTestCase(TestCase):
         error_text = fake.text()
         self.fake_proxy.get_lyrics.side_effect = ValueError(error_text)
 
-        with patch("management.command.MyLyricsCommand.factory", self.factory):
+        with patch("management.command.ProxyLyricsFactory", self.factory):
             with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
                 mock_args = CommandParserFactory.create_args(
                     version=False, 
@@ -110,11 +111,11 @@ class MyLyricsCommandTestCase(TestCase):
              
                 mock_parse_args.return_value = mock_args
 
-                with pytest.raises(SystemExit) as pytest_wrapped_e:
+                with patch('sys.stdout', new = StringIO()) as fake_out:
                     self.cmd.handle_command()
-                    self.assertEqual(pytest_wrapped_e.type, SystemExit)
-                    self.assertEqual(str(pytest_wrapped_e.type), error_text)
-
+                    self.assertIn(error_text, fake_out.getvalue())
+                    self.assertIn(f"No lyrics found to {self.song} by {self.artist}", fake_out.getvalue())
+                    
                 self.fake_proxy.get_lyrics.side_effect = None
                 self.fake_proxy.get_lyrics.return_value = None
                 with patch('sys.stdout', new = StringIO()) as fake_out:
@@ -128,7 +129,7 @@ class MyLyricsCommandTestCase(TestCase):
     def test_handle_command_all_ok_no_save(self,mock_load):
         
         mock_load.return_value = False
-        with patch("management.command.MyLyricsCommand.factory", self.factory):
+        with patch("management.command.ProxyLyricsFactory", self.factory):
             with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
                 mock_args = CommandParserFactory.create_args(
                     version=False, 
@@ -148,7 +149,7 @@ class MyLyricsCommandTestCase(TestCase):
     def test_handle_command_all_ok_and_save(self,mock_load, mock_path):
         
         mock_load.return_value = False
-        with patch("management.command.MyLyricsCommand.factory", self.factory):
+        with patch("management.command.ProxyLyricsFactory", self.factory):
             with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
                 mock_args = CommandParserFactory.create_args(
                     version=False, 
@@ -166,6 +167,31 @@ class MyLyricsCommandTestCase(TestCase):
                     
                     handle = mock_open()
                     handle.write.assert_called_once_with(self.lyrics)
+
+    @patch("management.command.Path")
+    @patch("management.command.load_from_folder")
+    @patch("management.command.get_providers")
+    def test_handle_command_no_providers_found(self, mock_getp, mock_load, mock_path):
+        mock_load.return_value = False
+        mock_getp.return_value = None
+        fake_provider = fake.name()
+        
+        with patch('management.command.MyLyricsCommand.parse_args') as mock_parse_args:
+            mock_args = CommandParserFactory.create_args(
+                version=False, 
+                artist=self.artist,
+                lyrics =self.song, 
+                save=True,
+                provider=fake_provider
+            )
+            
+            mock_parse_args.return_value = mock_args
+
+            with pytest.raises(SystemExit) as pytest_wrapped_e:
+                self.cmd.handle_command()
+
+            self.assertEqual(pytest_wrapped_e.type, SystemExit)
+            self.assertEqual(str(pytest_wrapped_e.value), f"error: unknown provider {fake_provider}")
 
 class MyLyricsCommandHelpersTestCase(TestCase):
     def setUp(self) -> None:
@@ -228,3 +254,21 @@ class MyLyricsCommandHelpersTestCase(TestCase):
         handle = mock_open()
         handle.write.assert_called_once_with(self.lyrics)
 
+
+    @patch("management.command.ProxyLyricsFactory")
+    def test_get_providers(self,mock_p):
+        fp1 = fake.name()
+        fp2 = fake.name()
+
+        mock_p.get.return_value = None
+        mock_p.values.return_value = [fp1,fp2]
+        
+        res = get_providers(fake.name())
+        self.assertIsNone(res)
+
+        mock_p.get.return_value = fp1
+        res = get_providers(fake.name())
+        self.assertEqual(res, [fp1])
+
+        res = get_providers(None)
+        self.assertEqual(res, [fp1,fp2])
