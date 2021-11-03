@@ -1,4 +1,4 @@
-[![build and test](https://github.com/mangelin/mylyrics/actions/workflows/build.yml/badge.svg)]
+![build and test](https://github.com/mangelin/mylyrics/actions/workflows/build.yml/badge.svg)
 [![codecov](https://codecov.io/gh/mangelin/mylyrics/branch/main/graph/badge.svg?token=UK2LPV47KB)](https://codecov.io/gh/mangelin/mylyrics)
 
 
