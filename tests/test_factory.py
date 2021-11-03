@@ -5,7 +5,7 @@ from io import StringIO
 import config
 from proxy import ProxyLyricsFactory
 from proxy.abstractLyrics import AbstractLyricsRetriverProxy
-from proxy.excpetion import ArtistNotFoundException, LyricNotFoundException, OutputTypeNotFound
+from proxy.exception import ArtistNotFoundException, LyricNotFoundException, OutputTypeNotFound
 
 from tests import fake
 

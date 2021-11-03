@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 
 from config import OUTPUT_FORMAT
 
-from .excpetion import (ArtistNotFoundException, LyricNotFoundException,
+from .exception import (ArtistNotFoundException, LyricNotFoundException,
                         OutputTypeNotFound)
 
 
