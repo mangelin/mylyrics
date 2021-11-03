@@ -3,6 +3,8 @@ on: [push]
 jobs:
   run_python:
     runs-on: ubuntu-latest
+    env:
+      CODECOV_TOKEN: ${{ secret.CODECOV_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -13,7 +15,4 @@ jobs:
       - run: pip install -r requirements/test.txt
       - run: coverage run -m pytest
       - run: coverage xml
-      - name: Upload coverage
-        env:
-          CODECOV_TOKEN: ${{ secret.CODECOV_TOKEN }}
       - run:  codecov -t $CODECOV_TOKEN
