@@ -13,3 +13,4 @@ jobs:
       - run: pip install -r requirements/test.txt
       - run: coverage run -m pytest
       - run: coverage xml
+      - run:  codecov -t $CODECOV_TOKEN
