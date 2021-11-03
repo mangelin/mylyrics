@@ -13,4 +13,7 @@ jobs:
       - run: pip install -r requirements/test.txt
       - run: coverage run -m pytest
       - run: coverage xml
+      - name: Upload coverage
+        env:
+          CODECOV_TOKEN: ${{ secret.CODECOV_TOKEN }}
       - run:  codecov -t $CODECOV_TOKEN
