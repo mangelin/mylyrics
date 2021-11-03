@@ -196,9 +196,6 @@ class Myawesomeproxy(AbstractLyricsRetriverProxy):
         your code
         """
 ```
-
-`NOTE` : class name must be a capitalized string.
-
 ### Registering the new provider
 
 To register a new provider so that can be available for user, you have to
@@ -211,3 +208,6 @@ MY_AWESOME_PROXY_SEARCH_URL="http//myawesonproxy.org/q="
 MY_AWESOME_PROXY="MyAwesomeProxy"
 register_provider(MY_AWESOME_PROXY)
 ```
+
+add the couple `(MY_AWESOME_PROXY, Myawesomeproxy)` to the provider factory dict
+in `proxy/__init__.py`
