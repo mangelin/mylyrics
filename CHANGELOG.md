@@ -13,6 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+
+## [0.4.0] - 2021-11-03
+
+### Changed
+
+* ProxyLyricsFactory it's now a simple dict
+* -p/--provider flag is not longer mandatory, if not specified 
+mylyrics try all providers
+### Fixed
+
+* type in proxy/excpetion.py -> proxy/exception.py
 ## [0.3.5] - 2021-11-03
 
 ### Added
