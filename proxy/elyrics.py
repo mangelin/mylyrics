@@ -1,11 +1,13 @@
-import requests
-import config
-from bs4 import BeautifulSoup as bs
-from urllib.parse import urljoin
 import re
+from urllib.parse import urljoin
+
+import config
+import requests
+from bs4 import BeautifulSoup as bs
 
 from .abstractLyrics import AbstractLyricsRetriverProxy
 from .helpers import helper_post_form, helper_retrive_url
+
 
 # Helpers function
 def _locate_string_value(soup, string_value):

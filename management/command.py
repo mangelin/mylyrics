@@ -1,12 +1,13 @@
 import argparse
-import sys
-from slugify import slugify
 import os
-
+import sys
 from pathlib import Path
-from management import __version__ as version
-from proxy import ProxyLyricsFactory
+
 import config
+from proxy import ProxyLyricsFactory
+from slugify import slugify
+
+from management import __version__ as version
 
 
 def save_to_folder(artist:str, song_name:str, lyrics:str):

@@ -1,12 +1,12 @@
-from abc import ABCMeta, abstractmethod
 import os
+from abc import ABCMeta, abstractmethod
 
 from config import OUTPUT_FORMAT
-from .excpetion import (
-    ArtistNotFoundException,
-    LyricNotFoundException,
-    OutputTypeNotFound
-)
+
+from .excpetion import (ArtistNotFoundException, LyricNotFoundException,
+                        OutputTypeNotFound)
+
+
 class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
     def __init__(self):
         self.outputs={

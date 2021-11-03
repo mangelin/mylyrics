@@ -1,11 +1,13 @@
-from bs4 import BeautifulSoup as bs
+import re
 from urllib.parse import urljoin
-import requests, re
 
 import config
+import requests
+from bs4 import BeautifulSoup as bs
 
 from .abstractLyrics import AbstractLyricsRetriverProxy
 from .helpers import helper_retrive_url
+
 
 # Helpers function
 def _locate_anchor(soup, value):
