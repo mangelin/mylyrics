@@ -13,6 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.3.5] - 2021-11-03
+
+### Added
+
+* CI: github action
+
+### Changed
+
+* build badge
+### Removed
+
+* travis script
+
 ## [0.3.4] - 2021-11-01
 
 ### Changed
