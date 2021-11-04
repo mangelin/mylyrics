@@ -63,6 +63,9 @@ class AbstractLyricsRetriverProxy(metaclass=ABCMeta):
 
         return outf(lyrics)
 
+    def __str__(self):
+        return self.name
+
     """
     Return the absolute url for the artist page
     Args:
