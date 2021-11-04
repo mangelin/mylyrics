@@ -44,14 +44,21 @@ def load_from_folder(artist:str, song_name:str):
 
 def get_providers(provider_name:str):
     if not provider_name:
-        return ProxyLyricsFactory.values()
+        for p in ProxyLyricsFactory.values():
+            yield p
+    else:
+        try:
+            yield ProxyLyricsFactory[provider_name]
+        except KeyError:
+            return
 
-    r = ProxyLyricsFactory.get(provider_name)
-    if not r:
-        return None
+def providers_desc(providers):
+    provider_list = list(providers)
+    if len(provider_list) == 0:
+        return "undefined"
 
-    return [r]
-
+    return ','.join([p.name for p in provider_list])
+    
 class MyLyricsCommand(object):
 
     def __init__(self):
@@ -84,10 +91,7 @@ class MyLyricsCommand(object):
         
         # Create provider
         providers = get_providers(args.provider)
-        
-        if not providers:
-            sys.exit(f"error: unknown provider {args.provider}")
-        
+
         # Try to fetch lyrics by provider
         for provider in providers:
         
@@ -107,7 +111,7 @@ class MyLyricsCommand(object):
                 return
 
         if not lyrics:
-            sys.stdout.write(f"No lyrics found to {args.lyrics} by {args.artist}")
+            sys.stdout.write(f"No lyrics found to {args.lyrics} by {args.artist} with providers : {providers_desc(get_providers(args.provider))}")
                 
         
         
