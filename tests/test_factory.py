@@ -70,4 +70,3 @@ class TestAbstractProxy(TestCase, AbstractLyricsRetriverProxy):
         self.assertRaises(OutputTypeNotFound, lambda: self._format_result('foo','xml'))
 
 
-

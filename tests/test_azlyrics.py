@@ -166,6 +166,10 @@ class AZLyricsTestCase(TestCase):
 
         self.assertTrue(res, self.expected_lyrics)
     
+    def test_str(self):
+        self.assertEqual(self.proxy.name, f"{self.proxy}")
+
+    
 class AZLyricsHelpersTestCase(TestCase):
     def setUp(self) -> None:
         self.mock_soup = Mock()
